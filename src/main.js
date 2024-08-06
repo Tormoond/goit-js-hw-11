@@ -1,10 +1,7 @@
 import { fetchPhotos } from './js/pixabay-api';
 import { galleryTemplate } from './js/render-functions';
-import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
-import closeIcon from './img/close.svg';
 import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
+
 
 const searchForm = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
