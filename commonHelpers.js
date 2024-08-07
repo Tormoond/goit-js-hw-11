@@ -1,28 +1,11 @@
-import{S as d}from"./assets/vendor-4842761a.js";(function(){const a=document.createElement("link").relList;if(a&&a.supports&&a.supports("modulepreload"))return;for(const t of document.querySelectorAll('link[rel="modulepreload"]'))o(t);new MutationObserver(t=>{for(const r of t)if(r.type==="childList")for(const i of r.addedNodes)i.tagName==="LINK"&&i.rel==="modulepreload"&&o(i)}).observe(document,{childList:!0,subtree:!0});function s(t){const r={};return t.integrity&&(r.integrity=t.integrity),t.referrerPolicy&&(r.referrerPolicy=t.referrerPolicy),t.crossOrigin==="use-credentials"?r.credentials="include":t.crossOrigin==="anonymous"?r.credentials="omit":r.credentials="same-origin",r}function o(t){if(t.ep)return;t.ep=!0;const r=s(t);fetch(t.href,r)}})();function h(e){const s=`https://pixabay.com/api/?${new URLSearchParams({key:"44324365-be3070df1c049607fe38536c0",q:e,image_type:"photo",orientation:"horizontal",safesearch:!0})}`;return fetch(s).then(o=>{if(!o.ok)throw new Error(o.status);return o.json()}).catch(o=>console.log("Error fetching photos:",o))}function m(e){return e.map(f).join("")}function f(e){return`<li class="gallery-item">
-  <a href="${e.largeImageURL}" class="gallery-item-link"
-    ><img
-      class="gallery-item-img"
-      src="${e.webformatURL}"
-      alt="${e.tags}"
-      width="360"
-  /></a>
-  <ul class="photo-info-list">
-    <li class="photo-info-item">
-      <p class="photo-data-name">Likes</p>
-      <p class="photo-data">${e.likes}</p>
-    </li>
-    <li class="photo-info-item">
-      <p class="photo-data-name">Views</p>
-      <p class="photo-data">${e.views}</p>
-    </li>
-    <li class="photo-info-item">
-      <p class="photo-data-name">Comments</p>
-      <p class="photo-data">${e.comments}</p>
-    </li>
-    <li class="photo-info-item">
-      <p class="photo-data-name">Downloads</p>
-      <p class="photo-data">${e.downloads}</p>
-    </li>
-  </ul>
-</li>`}const u=document.querySelector(".search-form"),l=document.querySelector(".gallery"),n=document.querySelector(".loader"),p=new d(".gallery a",{captionsData:"alt",captionDelay:350});u.addEventListener("submit",g);function g(e){e.preventDefault();const a=e.target.elements.searchField.value.trim();if(a===""){l.innerHTML="",c("You forgot enter data for search","#ffa000");return}n.classList.remove("visually-hidden"),h(a).then(s=>{if(s.hits.length===0)l.innerHTML="",c("Sorry, there are no images matching your search query. Please try again!","#EF4040");else{const o=m(s.hits);l.innerHTML=o,p.refresh()}n.classList.add("visually-hidden")}).catch(s=>{c("An error occurred while fetching photos. Please try again later.","#EF4040"),n.classList.add("visually-hidden")}),u.reset()}function c(e,a){iziToast.show({message:e,position:"topRight",backgroundColor:a,iconUrl:closeIcon,messageColor:"#fff",theme:"dark",maxWidth:"350px"})}
+import{i as c,S as p}from"./assets/vendor-8c59ed88.js";(function(){const s=document.createElement("link").relList;if(s&&s.supports&&s.supports("modulepreload"))return;for(const e of document.querySelectorAll('link[rel="modulepreload"]'))o(e);new MutationObserver(e=>{for(const r of e)if(r.type==="childList")for(const t of r.addedNodes)t.tagName==="LINK"&&t.rel==="modulepreload"&&o(t)}).observe(document,{childList:!0,subtree:!0});function i(e){const r={};return e.integrity&&(r.integrity=e.integrity),e.referrerPolicy&&(r.referrerPolicy=e.referrerPolicy),e.crossOrigin==="use-credentials"?r.credentials="include":e.crossOrigin==="anonymous"?r.credentials="omit":r.credentials="same-origin",r}function o(e){if(e.ep)return;e.ep=!0;const r=i(e);fetch(e.href,r)}})();const u=document.querySelector(".gallery");u.style.display="grid";u.style.gridTemplateColumns="repeat(auto-fill, minmax(300px, 1fr))";u.style.gap="16px";u.style.padding="16px";function f(n){if(!Array.isArray(n)){c.error({title:"Error",message:"displayImages expects an array but received:"+typeof n});return}const s=document.getElementById("imageResults");s.innerHTML="",n.forEach(o=>{const e=document.createElement("a");e.classList.add("image-card"),e.href=o.largeImageURL,e.innerHTML=`
+            
+            <img src="${o.webformatURL}" alt="${o.tags}" loading="lazy">
+            
+            <div class="info">
+                <p><b>Likes:</b> ${o.likes}</p>
+                <p><b>Views:</b> ${o.views}</p>
+                <p><b>Comments:</b> ${o.comments}</p>
+                <p><b>Downloads:</b> ${o.downloads}</p>
+            </div>`,s.appendChild(e);const r=e;r.style.position="relative",r.style.overflow="hidden",r.style.borderRadius="8px",r.style.boxShadow="0 2px 8px rgba(0, 0, 0, 0.1)";const t=e.querySelector(".info");t.style.position="absolute",t.style.bottom="0",t.style.left="0",t.style.right="0",t.style.padding="8px",t.style.background="rgba(0, 0, 0, 0.6)",t.style.color="#fff",t.style.fontSize="14px"}),new p(".gallery a",{captionsData:"alt",captionDelay:250}).refresh()}function m(){const n=document.getElementById("imageResults");n.innerHTML=""}function g(n,s){const i="https://pixabay.com/",o="api/",e=new URLSearchParams({key:n,q:s,image_type:"photo",orientation:"horizontal",safesearch:!0}),r=`${i}${o}?${e}`;return h(),fetch(r).then(t=>{if(!t.ok)throw new Error("Network response was not ok");return t.json()}).then(t=>{t.hits.length===0?(m(),c.error({title:"Error",message:"Sorry, there are no images matching your search query. Please try again!"})):f(t.hits)}).catch(t=>{c.error({title:"Error",message:"An error occurred while fetching images. Please try again!"}).finally(()=>{b()})})}const y=document.querySelector(".loader");function h(){y.classList.remove("hidden")}function b(){y.classList.add("hidden")}const x="44406774-b6929e0ee65f9835201f12742",l=document.querySelector("form");l.style.display="flex";l.style.justifyContent="center";l.style.gap="8px";l.style.height="40px";l.style.width="371px";l.style.margin="0 auto";l.style.fontFamily="Montserrat";l.style.fontSize="16px";const d=document.querySelector("input");d.style.width="272px";d.style.paddingLeft="16px";d.style.border="1px solid #808080";d.style.borderRadius="4px";d.style.color="#808080";const a=document.querySelector("button");a.style.width="91px";a.style.padding="0px";a.style.backgroundColor="#4E75FF";a.style.border="none";a.style.borderRadius="8px";a.style.color="#FFFFFF";document.addEventListener("DOMContentLoaded",()=>{const n=document.querySelector("form"),s=document.querySelector('input[type="text"]');n.addEventListener("submit",i=>{i.preventDefault(),s.value.trim()===""?c.error({title:"Error",message:"Поле пошуку не може бути порожнім"}):g(x,s.value).then(()=>{s.value=""}).catch(o=>{c.error({title:"Error",message:"An error occurred while fetching images. Please try again!"}),console.error("Error fetching images:",o)})})});
 //# sourceMappingURL=commonHelpers.js.map
