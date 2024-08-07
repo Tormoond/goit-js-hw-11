@@ -1,63 +1,68 @@
-import { fetchPhotos } from './js/pixabay-api';
-import { galleryTemplate } from './js/render-functions';
-import SimpleLightbox from 'simplelightbox';
+
+import getImages from './js/pixabay-api.js';
+import iziToast from "izitoast";
+import "izitoast/dist/css/iziToast.min.css";
 
 
-const searchForm = document.querySelector('.search-form');
-const gallery = document.querySelector('.gallery');
-const loader = document.querySelector('.loader');
-const lightbox = new SimpleLightbox('.gallery a', {
-  captionsData: 'alt',
-  captionDelay: 350,
-});
 
-searchForm.addEventListener('submit', onSearchBtnSubmit);
+const apiKey = '44406774-b6929e0ee65f9835201f12742';
 
-function onSearchBtnSubmit(event) {
-  event.preventDefault();
-  const valueToSearch = event.target.elements.searchField.value.trim();
+const searchForm = document.querySelector('form');
 
-  if (valueToSearch === '') {
-    gallery.innerHTML = '';
-    displayMessage('You forgot enter data for search', '#ffa000');
-    return;
-  }
-  loader.classList.remove('visually-hidden');
+searchForm.style.display = 'flex';
+searchForm.style.justifyContent = 'center';
+searchForm.style.gap = '8px';
+searchForm.style.height = '40px';
+searchForm.style.width = '371px';
+searchForm.style.margin = '0 auto';
+searchForm.style.fontFamily = 'Montserrat';
+searchForm.style.fontSize = '16px';
 
-  fetchPhotos(valueToSearch)
-    .then(data => {
-      if (data.hits.length === 0) {
-        gallery.innerHTML = '';
-        displayMessage(
-          'Sorry, there are no images matching your search query. Please try again!',
-          '#EF4040'
-        );
-      } else {
-        const markup = galleryTemplate(data.hits);
-        gallery.innerHTML = markup;
-        lightbox.refresh();
-      }
 
-      loader.classList.add('visually-hidden');
-    })
-    .catch(error => {
-      displayMessage(
-        'An error occurred while fetching photos. Please try again later.',
-        '#EF4040'
-      );
-      loader.classList.add('visually-hidden');
+const searchInput = document.querySelector('input');
+
+searchInput.style.width = '272px';
+searchInput.style.paddingLeft = '16px';
+searchInput.style.border = '1px solid #808080';
+searchInput.style.borderRadius = '4px';
+searchInput.style.color = '#808080';
+
+
+const searchButton = document.querySelector('button');
+
+searchButton.style.width = '91px';
+searchButton.style.padding = '0px';
+searchButton.style.backgroundColor = '#4E75FF';
+searchButton.style.border = 'none';
+searchButton.style.borderRadius = '8px';
+searchButton.style.color = '#FFFFFF';
+
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('form');
+    const input = document.querySelector('input[type="text"]');
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        if (input.value.trim() === '') {
+            
+            iziToast.error({
+                title: 'Error',
+                message: 'Поле пошуку не може бути порожнім',
+            });
+        
+        } else {
+            getImages(apiKey, input.value)
+              .then(() => {
+                    input.value = ''; 
+                })
+                .catch(error => {
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'An error occurred while fetching images. Please try again!',
+                    });
+                    console.error('Error fetching images:', error);
+                });
+        }
     });
-  searchForm.reset();
-}
 
-function displayMessage(message, color) {
-  iziToast.show({
-    message: message,
-    position: 'topRight',
-    backgroundColor: color,
-    iconUrl: closeIcon,
-    messageColor: '#fff',
-    theme: 'dark',
-    maxWidth: '350px',
-  });
-}
+});
